@@ -62,7 +62,71 @@ function setupEventListeners() {
         }
     });
 
+    // Xử lý tự động tách địa chỉ chi tiết từ địa chỉ đầy đủ
+    inputAddress.addEventListener('input', function(e) {
+        const fullAddress = this.value.trim();
+        if (fullAddress) {
+            const extractedAddress = extractDetailedAddress(fullAddress);
+            if (extractedAddress.detailedAddress !== fullAddress) {
+                this.value = extractedAddress.detailedAddress;
+                
+                // Tự động điền vào input tìm kiếm nếu có thông tin hành chính
+                if (extractedAddress.administrativeInfo) {
+                    searchWardInput.value = extractedAddress.administrativeInfo;
+                    showSuggestions(extractedAddress.administrativeInfo);
+                }
+            }
+        }
+    });
+
     // Đã loại bỏ tự động focus từ input trên sang input dưới
+}
+
+// Hàm tách địa chỉ chi tiết từ địa chỉ đầy đủ
+function extractDetailedAddress(fullAddress) {
+    // Các từ khóa chỉ đơn vị hành chính
+    const administrativeKeywords = [
+        'phường', 'xã', 'thị trấn', 'quận', 'huyện', 'thành phố', 'tỉnh', 'việt nam'
+    ];
+    
+    // Tách địa chỉ thành các phần
+    const parts = fullAddress.split(',').map(part => part.trim());
+    
+    let detailedAddress = '';
+    let administrativeInfo = '';
+    let foundAdministrative = false;
+    
+    for (let i = 0; i < parts.length; i++) {
+        const part = parts[i].toLowerCase();
+        let isAdministrative = false;
+        
+        // Kiểm tra xem phần này có chứa từ khóa hành chính không
+        for (const keyword of administrativeKeywords) {
+            if (part.includes(keyword)) {
+                isAdministrative = true;
+                foundAdministrative = true;
+                break;
+            }
+        }
+        
+        if (isAdministrative) {
+            // Từ phần này trở đi là thông tin hành chính
+            administrativeInfo = parts.slice(i).join(', ');
+            break;
+        } else {
+            // Phần này là địa chỉ chi tiết
+            if (detailedAddress) {
+                detailedAddress += ', ' + parts[i];
+            } else {
+                detailedAddress = parts[i];
+            }
+        }
+    }
+    
+    return {
+        detailedAddress: detailedAddress,
+        administrativeInfo: administrativeInfo
+    };
 }
 
 // Load dữ liệu mapping từ file JSON
