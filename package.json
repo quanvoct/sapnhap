@@ -1,0 +1,34 @@
+{
+  "name": "address-converter",
+  "version": "1.0.0",
+  "description": "Ứng dụng chuyển đổi địa chỉ tỉnh thành Việt Nam",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8000 -o",
+    "dev": "npx live-server --port=8000",
+    "build": "echo 'No build process needed for static HTML'"
+  },
+  "keywords": [
+    "vietnam",
+    "address",
+    "converter",
+    "province",
+    "ward",
+    "bootstrap",
+    "javascript"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/address-converter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/address-converter/issues"
+  },
+  "homepage": "https://github.com/yourusername/address-converter#readme"
+} 
